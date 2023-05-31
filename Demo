@@ -1,0 +1,41 @@
+const int echoPin = D3;     // Echo pin connected to D3
+const int trigPin = D2;     // Trigger pin connected to D2
+const int ledPin = D4;      // LED pin connected to D4
+
+void setup() {
+  pinMode(echoPin, INPUT);
+  pinMode(trigPin, OUTPUT);
+  pinMode(ledPin, OUTPUT);
+  
+  Serial.begin(9600);
+}
+
+void loop() {
+  // Clear the trigger pin
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
+  
+  // Send a 10us pulse to trigger the ultrasonic sensor
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+  
+  // Measure the duration of the echo pulse
+  long duration = pulseIn(echoPin, HIGH);
+  
+  // Convert the duration to distance in centimeters
+  float distance = duration * 0.034 / 2;
+  
+  Serial.print("Distance: ");
+  Serial.print(distance);
+  Serial.println(" cm");
+  
+  // Check if the distance is less than a certain threshold
+  if (distance < 50) {  // Adjust the threshold as per your requirements
+    digitalWrite(ledPin, HIGH);  // Turn on the LED
+  } else {
+    digitalWrite(ledPin, LOW);   // Turn off the LED
+  }
+  
+  delay(500);  // Adjust the delay as needed for your application
+}
